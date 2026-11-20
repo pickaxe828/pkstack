@@ -26,7 +26,15 @@ git clone https://github.com/pickaxe828/pkstack
 ./pkstack/install.sh ~/some/skills/dir  # or name the directories
 ```
 
-The script installs every pkstack skill plus the dependencies above, fetched from their own repos. It skips any skill already in the target directory, so it never overwrites your copies or edits.
+Or use the [`skills` CLI](https://github.com/vercel-labs/skills). It installs only the skills in the repo you name, so add the dependencies as well:
+
+```bash
+bunx skills add pickaxe828/pkstack -g
+bunx skills add t3dotgg/tstack --skill council -g
+bunx skills add mattpocock/skills --skill tdd -g
+```
+
+`install.sh` installs every pkstack skill plus the dependencies above, fetched from their own repos. It skips any skill already in the target directory, so it never overwrites your copies or edits.
 
 ## Skills
 

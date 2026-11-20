@@ -16,6 +16,10 @@ Read these inputs from the arguments, using the defaults for any left out:
 - **Council members:** default GPT-6.2 Sol at medium effort and Claude Sonnet 5.5 at medium effort.
 - **Helper subagents:** Claude Sonnet 5.5 at medium effort, for implementation or testing work you hand off.
 
+## Dependencies
+
+This skill calls `tdd` from [mattpocock/skills](https://github.com/mattpocock/skills), `council` from [t3dotgg/tstack](https://github.com/t3dotgg/tstack), and `proof` from pkstack. Before step 1, check that all three are in your available skills. If any is missing, stop and tell the user which one, and that pkstack's `install.sh` installs it. Do not imitate a missing skill from memory.
+
 ## Boundaries
 
 - Work in the current worktree on its own branch. Never push to, merge into, or rebase the default branch.
@@ -28,10 +32,9 @@ Read these inputs from the arguments, using the defaults for any left out:
 2. **Build test-first.** Call the Skill tool with `tdd`. Run the typecheck and single test files as you go, and the full suite at the end. Hand work to helper subagents only when it is independent of what you are doing. Brief them with pointers (the issue, files, commits), not restated context.
 3. **Open the draft PR.** Commit, push the branch, and open a draft PR that closes the spec issue.
 4. **Prove it.** Call the Skill tool with `proof`. The proof goes in the PR description.
-5. **Convene the council.** Start one fresh review delegate per member, in parallel, using the harness's mechanism for running other providers' models (in T3 Code, `delegate_task`). Brief each with the issue, the PR, the branch and its base, and the bar. Ask for a score out of 10 and findings ranked by severity, each with a concrete failure scenario.
-6. **Act on findings.** Check each finding against the code before acting. Fix the ones that hold up, test-first. Record a reason for each one you reject. Rerun the proof checks the fixes affect, then push.
-7. **Repeat rounds.** If any member scored below the bar, start a new round with new delegates. Their brief includes the previous findings and how you handled each. Stop when every member meets the bar in the same round. Any behavior change after that round needs another round. If findings repeat across rounds or conflict with the spec, stop and ask the user instead of looping.
-8. **Keep the PR current.** Its description holds the proof and a council table of each member's score per round. Preserve unrelated content when updating it.
+5. **Convene the council.** Call the Skill tool with `council` to review the PR. Name the council members, and set "satisfied" as every member scoring at least the bar in the same round. Brief the members with the issue, the PR, and the branch and its base. `council` runs the rounds and puts the score table in the PR description.
+6. **Within each round:** fix findings that hold up test-first, rerun the proof checks the fixes affect, and push before the next round. Any behavior change after the final round needs another round. If findings repeat across rounds or conflict with the spec, stop and ask the user instead of looping.
+7. **Keep the PR current.** Its description holds the proof and the council table. Preserve unrelated content when updating it.
 
 ## Report
 
